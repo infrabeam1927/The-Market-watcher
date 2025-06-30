@@ -81,32 +81,6 @@ GET http://localhost:5000/api/prices/TSLA
 
 ---
 
-### 🧪 Swagger Documentation
-
-Open Swagger UI in your browser:
-
-```
-http://localhost:5000/api-docs
-```
-
-Use it to:
-- Test endpoints
-- Read parameter documentation
-- View response examples
-
----
-
-## 📸 Screenshots
-
-> *(Add your actual screenshots here)*
-
-```markdown
-![Frontend UI](screenshots/frontend.png)
-![Swagger UI](screenshots/swagger.png)
-```
-
----
-
 ## 📦 Future Improvements
 
 - 📊 Add 7-day historical price chart
