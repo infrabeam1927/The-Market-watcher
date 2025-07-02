@@ -9,10 +9,21 @@
 <body>
   <div class="container">
     <h1>📈 Stock Price Tracker</h1>
+
     <input type="text" id="symbolInput" placeholder="Enter stock symbol (e.g., AAPL)" />
     <button onclick="fetchPrice()">Get Price</button>
-    <div id="result"></div>
+
+    <!-- ✅ Auto-refresh toggle -->
+    <label style="display: block; margin-top: 10px;">
+      <input type="checkbox" id="autoRefresh" checked />
+      🔄 Enable Auto-Refresh (30s)
+    </label>
+
+    <!-- ✅ Display results and timestamp -->
+    <div id="result" style="margin-top: 20px;"></div>
+    <p id="lastUpdated" style="font-size: 0.9em; color: gray;"></p>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
