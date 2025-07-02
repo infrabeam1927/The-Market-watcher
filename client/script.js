@@ -2,11 +2,13 @@ const symbolInput = document.getElementById("symbolInput");
 const resultDiv = document.getElementById("result");
 const lastUpdatedEl = document.getElementById("lastUpdated");
 const autoRefreshCheckbox = document.getElementById("autoRefresh");
+const recentList = document.getElementById("recentList");
 
 let currentSymbol = "";
 let refreshInterval = null;
+let recentSearches = [];
 
-// Main function to fetch and display price
+// Fetch stock price
 async function fetchPrice() {
   const symbol = symbolInput.value.trim().toUpperCase();
   if (!symbol) {
@@ -28,6 +30,17 @@ async function fetchPrice() {
 
     const now = new Date();
     lastUpdatedEl.textContent = `Last updated: ${now.toLocaleTimeString()}`;
+
+    // Update recent searches
+    const existing = recentSearches.find(item => item.symbol === symbol);
+    if (existing) {
+      existing.price = data.price;
+    } else {
+      recentSearches.unshift({ symbol, price: data.price });
+      if (recentSearches.length > 5) recentSearches.pop();
+    }
+
+    renderRecentSearches();
   } catch (err) {
     console.error(err);
     resultDiv.innerHTML = `<p style="color: red;">⚠️ ${err.message}</p>`;
@@ -35,7 +48,18 @@ async function fetchPrice() {
   }
 }
 
-// Set up auto-refresh every 30 seconds
+// Render recent search list
+function renderRecentSearches() {
+  recentList.innerHTML = "";
+
+  recentSearches.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = `${item.symbol} - $${item.price}`;
+    recentList.appendChild(li);
+  });
+}
+
+// Auto-refresh setup
 function setupAutoRefresh() {
   if (refreshInterval) clearInterval(refreshInterval);
 
@@ -43,11 +67,8 @@ function setupAutoRefresh() {
     if (autoRefreshCheckbox.checked && currentSymbol) {
       fetchPrice();
     }
-  }, 30000); // 30 seconds
+  }, 30000);
 }
 
-// Start monitoring when checkbox is toggled
 autoRefreshCheckbox.addEventListener("change", setupAutoRefresh);
-
-// Kick off auto-refresh on page load
 setupAutoRefresh();
