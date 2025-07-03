@@ -8,7 +8,13 @@ let currentSymbol = "";
 let refreshInterval = null;
 let recentSearches = [];
 
-// Fetch stock price
+// Handle form submission (for Enter key or button)
+function handleFormSubmit(event) {
+  event.preventDefault();
+  fetchPrice();
+}
+
+// Fetch and display price
 async function fetchPrice() {
   const symbol = symbolInput.value.trim().toUpperCase();
   if (!symbol) {
@@ -31,7 +37,7 @@ async function fetchPrice() {
     const now = new Date();
     lastUpdatedEl.textContent = `Last updated: ${now.toLocaleTimeString()}`;
 
-    // Update recent searches
+    // Update recent searches list
     const existing = recentSearches.find(item => item.symbol === symbol);
     if (existing) {
       existing.price = data.price;
@@ -48,18 +54,26 @@ async function fetchPrice() {
   }
 }
 
-// Render recent search list
+// Render recent searches as buttons
 function renderRecentSearches() {
   recentList.innerHTML = "";
 
   recentSearches.forEach(item => {
     const li = document.createElement("li");
-    li.textContent = `${item.symbol} - $${item.price}`;
+    const btn = document.createElement("button");
+
+    btn.textContent = `${item.symbol} - $${item.price}`;
+    btn.addEventListener("click", () => {
+      symbolInput.value = item.symbol;
+      fetchPrice();
+    });
+
+    li.appendChild(btn);
     recentList.appendChild(li);
   });
 }
 
-// Auto-refresh setup
+// Auto-refresh
 function setupAutoRefresh() {
   if (refreshInterval) clearInterval(refreshInterval);
 
